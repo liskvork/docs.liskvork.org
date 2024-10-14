@@ -3,26 +3,32 @@
 This is the original protocol as described from [Petr Laštovička's
 website](https://plastovicka.github.io/) here:
 
-[https://plastovicka.github.io/protocl2en.htm](https://plastovicka.github.io/protocl2en.htm)
+<https://plastovicka.github.io/protocl2en.htm>
+
+This current version has been cleaned up to be more readable in a md/mdbook
+format, and some infos might be missing (It shouldn't be a problem.)
 
 ## Introduction
 
 This document describes communication between a brain (an artificial
-intelligence) and a go-moku manager (a program which manages and controls
-a tournament). The manager creates two pipes. The first pipe is used to send
-commands from the manager to the brain. The second pipe is used to send replies
-from the brain to the manager. The brain uses standard input-output functions
-(scanf and printf in C, readln and writeln in Pascal,...) therefore it can be
-written in any programming language. The brain must be a console application,
-not Windows GUI. Be careful, some run-time libraries buffer the console
-output. For example, it is necessary to call fflush(stdout) after printf in
-C programs. You can also use low-level functions ReadFile and WriteFile.
+intelligence) and a gomoku manager (a program which manages and controls
+a tournament).
+
+The manager creates two pipes. The first pipe is used to send commands from
+the manager to the brain. The second pipe is used to send replies from the
+brain to the manager. The brain uses standard input-output functions (scanf
+and printf in C,...) therefore it can be written in any programming language.
+
+The brain must be a console application, not Windows GUI. Be careful, some
+run-time libraries buffer the console output. For example, it is necessary
+to call `fflush(stdout)` after `printf` in C programs. You can also use
+low-level functions ReadFile and WriteFile.
 
 Each line contains exactly one command (there is only one exception). The
-manager puts bytes CR LF (0x0d, 0x0a) at the end of lines. The brain can
-send lines that are ended with CR LF, or just LF, or CR. The manager ignores
-lines that are empty. It must not crash if a line is too long, but it can
-silently cut very long lines.
+manager puts bytes `CR` `LF` (`0x0d`, `0x0a`) at the end of lines. The brain
+can send lines that are ended with `CR` `LF`, or just `LF`, or `CR`. The
+manager ignores lines that are empty. It must not crash if a line is too long,
+but it can silently cut very long lines.
 
 If the brain has only one thread, it is very important not to read from input
 when the brain is required to think or respond to a command. It would lead
@@ -36,40 +42,34 @@ tournament. But two threads are useful for human players. For example, someone
 may want to change time limits while the brain already started to think. The
 thinking can also be easily canceled at any time without terminating the brain.
 
-The brain is required to process commands START, BEGIN, INFO, BOARD, TURN,
-END. The brain can ignore INFO commands which are not needed. The reply for
-every other command is UNKNOWN (Due to backward compatibility and possibility
-to extend the protocol).  Brain's name and temporary files The name of the
-brain can contain only characters A-Z, a-z, 0-9, dash, underscore, dot. The
-name is required to begin with prefix "pbrain-". In the other case the brain
-is considered to use communication via files (old method).
+The brain is required to process commands `START`, `BEGIN`, `INFO`, `BOARD`,
+`TURN`, END. The brain can ignore INFO commands which are not needed. The
+reply for every other command is UNKNOWN (Due to backward compatibility and
+possibility to extend the protocol).
 
-Example: pbrain-swine.exe pbrain-pisq5.exe
+## Brain's name and temporary files
 
-Only the executable file is required to begin with prefix "pbrain-". The name
-of ZIP file does not have this prefix. There can be both 32-bit and 64-bit exe
-in the ZIP file, the 64-bit exe file name must have substring 64. For example,
-MyGomo.ZIP can contain files pbrain-MyGomo.exe and pbrain-MyGomo64.exe. The
-manager launches pbrain-MyGomo.exe on 32-bit OS and pbrain-MyGomo64.exe on
-64-bit OS.
+The name of the brain can contain only characters A-Z, a-z, 0-9, dash,
+underscore, dot.  The name is required to begin with prefix "pbrain-". In
+the other case the brain is considered to use communication [via files
+(old method)](https://plastovicka.github.io/protocl1en.htm).
 
-Working directory is set by the manager. It doesn't have to be the directory
-where the brain's executable file is saved. The brain must specify full
-path to all data files which it uses. It can obtain the path from function
-GetModuleFileName or it can look at the beginning of its command line which
-can be discovered from the main function parameters. The manager must put
-name of brain's exe file on the command line in such a form so that the
-brain can open the file.
+Example: `pbrain-swine.exe` `pbrain-pisq5.exe`
 
 The brain can create a folder in the current directory to store its temporary
 files. The name of the folder must be the same as the name of the brain. The
 maximal allowed size of the folder will be announced on Gomocup web page
-(it is now 20MB). The manager can delete all temporary files when the
-manager exits or after a tournament finished. Command INFO folder is used
-to determine folder where persistent files can be saved.  Mandatory commands
-START [size] When the brain receives this command, it initializes itself and
-creates an empty board, but doesn't make any move yet. The parameter is size
-of the board. The brain must be able to play on board of size 20, because
+(it is now 20MB). The manager can delete all temporary files when the manager
+exits or after a tournament finished. Command INFO folder is used to determine
+folder where persistent files can be saved.
+
+## Mandatory commands
+
+### START [size]
+
+When the brain receives this command, it initializes itself and creates
+an empty board, but doesn't make any move yet. The parameter is size of
+the board. The brain must be able to play on board of size 20, because
 this size will be used in Gomocup tournaments. It is recommended but not
 required to support other board sizes. If the brain doesn't like the size,
 it responds ERROR. There can be a message after the ERROR word. The manager
@@ -82,8 +82,10 @@ Example:
  The brain answers:
   OK - everything is good ERROR message - unsupported size or other error
 
-TURN [X],[Y] The parameters are coordinate of the opponent's move. All
-coordinates are numbered from zero.
+### TURN [X],[Y]
+
+The parameters are coordinate of the opponent's move. All coordinates are
+numbered from zero.
 
 Expected answer:
  two comma-separated numbers - coordinates of the brain's move
@@ -94,12 +96,14 @@ Example:
  The brain answers:
   11,10
 
-BEGIN This command is send by the manager to one of the players (brains)
-at the beginning of a match. This means that the brain is expected to play
-(open the match) on the empty playing board. After that the other brain
-obtains the TURN command with the first opponent's move. The BEGIN command
-is not used when automatic openings are enabled, because in that case both
-brains receive BOARD commands instead.
+### BEGIN
+
+This command is send by the manager to one of the players (brains) at the
+beginning of a match. This means that the brain is expected to play (open
+the match) on the empty playing board. After that the other brain obtains
+the TURN command with the first opponent's move. The BEGIN command is not
+used when automatic openings are enabled, because in that case both brains
+receive BOARD commands instead.
 
 Expected answer:
  two numbers separated by comma - coordinates of the brain's move
@@ -110,7 +114,9 @@ Example:
  The brain answers:
   10,10
 
-BOARD This command imposes entirely new playing field. It is suitable for
+### BOARD
+
+This command imposes entirely new playing field. It is suitable for
 continuation of an opened match or for undo/redo user commands. The BOARD
 command is usually send after START, RESTART or RECTSTART command when the
 board is empty. If there is any open match, the manager sends RESTART command
@@ -136,24 +142,25 @@ Example:
  The brain answers:
   9,9
 
-INFO [key] [value] The manager sends information to the brain. The brain
-can ignore it. However, the brain will lose if it exceeds the limits. The
-brain must cope with situations when the manager doesn't send all information
-which is mentioned in this document. Most of this information is sent at the
-beginning of a match. The time limits will not be changed in the middle of
-a match during a tournament. It is recommended to react on commands at any
-time, because the human opponent can change these values even when the brain
-is thinking.
+### INFO [key] [value]
+
+The manager sends information to the brain. The brain can ignore it. However,
+the brain will lose if it exceeds the limits. The brain must cope with
+situations when the manager doesn't send all information which is mentioned
+in this document. Most of this information is sent at the beginning of a
+match. The time limits will not be changed in the middle of a match during
+a tournament. It is recommended to react on commands at any time, because
+the human opponent can change these values even when the brain is thinking.
 
  The key can be:
-timeout_turn  - time limit for each move (milliseconds, 0=play as fast
-as possible) timeout_match - time limit of a whole match (milliseconds,
-0=no limit) max_memory    - memory limit (bytes, 0=no limit) time_left
-- remaining time limit of a whole match (milliseconds) game_type     -
-0=opponent is human, 1=opponent is brain, 2=tournament, 3=network tournament
-rule          - bitmask or sum of 1=exactly five in a row win, 2=continuous
-game, 4=renju, 8=caro evaluate      - coordinates X,Y representing current
-position of the mouse cursor folder        - folder for persistent files
+timeout_turn  - time limit for each move (milliseconds, 0=play as fast as
+possible) timeout_match - time limit of a whole match (milliseconds, 0=no
+limit) max_memory    - memory limit (bytes, 0=no limit) time_left - remaining
+time limit of a whole match (milliseconds) game_type     - 0=opponent is
+human, 1=opponent is brain, 2=tournament, 3=network tournament rule          -
+bitmask or sum of 1=exactly five in a row win, 2=continuous game, 4=renju,
+8=caro evaluate      - coordinates X,Y representing current position of the
+mouse cursor folder        - folder for persistent files
 
 Information about time and memory limits is sent before the first move
 (after or before START command). Info time_left is sent before every move
@@ -194,16 +201,19 @@ Example:
 
  Expected answer: none
 
-END When the brain obtains this command, it must terminate as soon as
-possible. The manager waits until the brain is finished. If the time of
-termination is too long (e.g. 1 second), the brain will be terminated by
-the manager. The brain should not write anything to output after the END
-command. However, the manager should not close the pipe until the brain
-is ended.
+### END
+
+When the brain obtains this command, it must terminate as soon as possible. The
+manager waits until the brain is finished. If the time of termination is
+too long (e.g. 1 second), the brain will be terminated by the manager. The
+brain should not write anything to output after the END command. However,
+the manager should not close the pipe until the brain is ended.
 
  Expected answer: none The brain should delete its temporary files.
 
-ABOUT The brain is expected to send some information about itself on one
+### ABOUT
+
+The brain is expected to send some information about itself on one
 line. Each info must be written as keyword, equals sign, text value in
 quotation marks. Recommended keywords are name, version, author, country,
 www, email. Values should be separated by commas that can be followed by
@@ -216,11 +226,16 @@ Example:
  The brain answers:
   name="SomeBrain", version="1.0", author="Nymand", country="USA"
 
-Optional commands The extended commands published in this section are not
-required to be implemented in Gomocup tournament, however it can be useful
-especially for human players.  RECTSTART [width],[height] This command
-is similar to START, but the board is rectangular. Parameters are two
-comma-separated numbers. Width corresponds to coordinate X, height belongs
+## Optional commands
+
+The extended commands published in this section are not required to be
+implemented in Gomocup tournament, however it can be useful especially for
+human players.
+
+### RECTSTART [width],[height]
+
+This command is similar to START, but the board is rectangular. Parameters are
+two comma-separated numbers. Width corresponds to coordinate X, height belongs
 to coordinate Y. The manager must use START command if the board is squared.
 
 Example:
@@ -230,12 +245,14 @@ Example:
   OK - parameters are good ERROR message - rectangular board is not supported
   or other error
 
-RESTART This command is used after the match is finished or aborted. This
-command has no parameters. The board size remains unchanged. The brain
-releases previous board and other structures, creates a new empty board
-and prepares itself for a new match. Then the brain answers OK and further
-communication continues as after START command. If the brain answers UNKNOWN,
-the manager sends END and executes the brain again.
+### RESTART
+
+This command is used after the match is finished or aborted. This command
+has no parameters. The board size remains unchanged. The brain releases
+previous board and other structures, creates a new empty board and prepares
+itself for a new match. Then the brain answers OK and further communication
+continues as after START command. If the brain answers UNKNOWN, the manager
+sends END and executes the brain again.
 
 Example:
  The manager sends:
@@ -243,8 +260,10 @@ Example:
  The brain answers:
   OK
 
-TAKEBACK [X],[Y] This command is used to undo last move. The brain removes
-stone which has coordinate [X,Y] and then answers OK.
+### TAKEBACK [X],[Y]
+
+This command is used to undo last move. The brain removes stone which has
+coordinate [X,Y] and then answers OK.
 
 Example:
  The manager sends:
@@ -252,11 +271,13 @@ Example:
  The brain answers:
   OK
 
-PLAY [X],[Y] It is used by the manager as a respond to SUGGEST command only. It
-imposes move [X],[Y] to the brain.  Expected answer: two comma-separated
-numbers which should be the same as PLAY parameters. If the brain doesn't
-like the coordinates sent by the manager, it can answer some other coordinates
-(but it is not recommended).
+### PLAY [X],[Y]
+
+It is used by the manager as a respond to SUGGEST command only. It imposes
+move [X],[Y] to the brain.  Expected answer: two comma-separated numbers
+which should be the same as PLAY parameters. If the brain doesn't like the
+coordinates sent by the manager, it can answer some other coordinates (but
+it is not recommended).
 
 Example:
  The brain has sent:
@@ -266,9 +287,11 @@ Example:
  The brain moves onto 12,10 and answers:
   12,10
 
-SWAP2BOARD This command is used to deal with the opening stage of Swap2
-rule. It is sent once or twice to the AI between command START and command
-BOARD. Specifically, it has three cases, and we show examples for each of them.
+### SWAP2BOARD
+
+This command is used to deal with the opening stage of Swap2 rule. It is sent
+once or twice to the AI between command START and command BOARD. Specifically,
+it has three cases, and we show examples for each of them.
 
     Case 1. The manager asks for the first three stones.
 
@@ -309,18 +332,30 @@ BOARD. Specifically, it has three cases, and we show examples for each of them.
 
     BOARD 7,7,2 8,7,1 9,9,2 DONE
 
-Commands that are sent by the brain The brain can use these commands if it
-needs them. The manager is required to know them.  UNKNOWN [error message]
+## Commands that are sent by the brain
+
+The brain can use these commands if it needs them. The manager is required
+to know them.
+
+### UNKNOWN [error message]
+
 The brain sends this as a respond to a command that is unknown or not yet
 implemented. That means the brain must not exit after receiving some strange
-line from the manager. The parameter after UNKNOWN keyword is message that can
-be displayed by the manager to a user. If the manager has sent some optional
-command which the brain does not implement, then the manager is required to
-try some mandatory command.  ERROR [error message] The brain sends this when
-it receives some known command, but is not able to cope with it. For example
-the memory limit is too small or the board is too large. Parameter is a short
-message that the manager writes to a log window or to a log file. The manager
-can also change some game options and try action again.  MESSAGE [message]
+line from the manager. The parameter after UNKNOWN keyword is message that
+can be displayed by the manager to a user. If the manager has sent some
+optional command which the brain does not implement, then the manager is
+required to try some mandatory command.
+
+### ERROR [error message]
+
+The brain sends this when it receives some known command, but is not able
+to cope with it. For example the memory limit is too small or the board is
+too large. Parameter is a short message that the manager writes to a log
+window or to a log file. The manager can also change some game options and
+try action again.
+
+### MESSAGE [message]
+
 The message for a user. The manager can write it to some log window or to a
 log file. The brain is expected to send messages just before respond to some
 command. There must not be a new line character inside a message. Multi-line
@@ -329,9 +364,13 @@ text can be sent as a sequence of two or more MESSAGE commands.
 It is recommended to send only English messages. If the brain chooses another
 language, it should detect code page that is used on the PC (Win32 function
 GetACP()) and should not send messages that cannot be displayed in that
-code page.  DEBUG [message] It is similar to MESSAGE command, but it is
-used for debugging information that is useful only for the author of the
-brain. These messages will not be visible to public in Gomocup tournament.
+code page.
+
+### DEBUG [message]
+
+It is similar to MESSAGE command, but it is used for debugging information
+that is useful only for the author of the brain. These messages will not be
+visible to public in Gomocup tournament.
 
 Example:
  The manager sends:
@@ -341,9 +380,10 @@ Example:
   The most promising move now is [11,14] alfa=10125 beta=8641 MESSAGE I will
   be the winner 10,16
 
-SUGGEST [X],[Y] The brain can answer SUGGEST [X],[Y] instead of [X],[Y]
-and does not change it's internal state. The manager has a possibility to
-ignore brain's suggestion and force another move to the brain. Expected
-manager's answer is PLAY or END. In Gomocup tournament the manager always
-answers the move the brain has sent in the SUGGEST command. Most brains do
-not use SUGGEST command.
+### SUGGEST [X],[Y]
+
+The brain can answer SUGGEST [X],[Y] instead of [X],[Y] and does not change
+it's internal state. The manager has a possibility to ignore brain's suggestion
+and force another move to the brain. Expected manager's answer is PLAY or
+END. In Gomocup tournament the manager always answers the move the brain
+has sent in the SUGGEST command. Most brains do not use SUGGEST command.
