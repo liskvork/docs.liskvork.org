@@ -16,13 +16,13 @@ a tournament).
 
 The manager creates two pipes. The first pipe is used to send commands from
 the manager to the brain. The second pipe is used to send replies from the
-brain to the manager. The brain uses standard input-output functions (scanf
-and printf in C,...) therefore it can be written in any programming language.
+brain to the manager. The brain uses standard input-output functions (`scanf`
+and `printf` in C,...) therefore it can be written in any programming language.
 
 The brain must be a console application, not Windows GUI. Be careful, some
 run-time libraries buffer the console output. For example, it is necessary
 to call `fflush(stdout)` after `printf` in C programs. You can also use
-low-level functions ReadFile and WriteFile.
+low-level functions `ReadFile` and `WriteFile` in Windows.
 
 Each line contains exactly one command (there is only one exception). The
 manager puts bytes `CR` `LF` (`0x0d`, `0x0a`) at the end of lines. The brain
