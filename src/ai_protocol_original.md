@@ -397,7 +397,7 @@ to know them.
 
 The brain sends this as a respond to a command that is unknown or not yet
 implemented. That means the brain must not exit after receiving some strange
-line from the manager. The parameter after UNKNOWN keyword is message that
+line from the manager. The parameter after `UNKNOWN` keyword is message that
 can be displayed by the manager to a user. If the manager has sent some
 optional command which the brain does not implement, then the manager is
 required to try some mandatory command.
@@ -415,7 +415,7 @@ try action again.
 The message for a user. The manager can write it to some log window or to a
 log file. The brain is expected to send messages just before respond to some
 command. There must not be a new line character inside a message. Multi-line
-text can be sent as a sequence of two or more MESSAGE commands.
+text can be sent as a sequence of two or more `MESSAGE` commands.
 
 It is recommended to send only English messages. If the brain chooses another
 language, it should detect code page that is used on the PC (Win32 function
@@ -424,22 +424,25 @@ code page.
 
 ### DEBUG [message]
 
-It is similar to MESSAGE command, but it is used for debugging information
+It is similar to `MESSAGE` command, but it is used for debugging information
 that is useful only for the author of the brain. These messages will not be
 visible to public in Gomocup tournament.
 
+```
 Example:
  The manager sends:
   TURN 10,15
  The brain answers:
-  DEBUG The most promising move now is [10,14] alfa=10025 beta=8641 DEBUG
-  The most promising move now is [11,14] alfa=10125 beta=8641 MESSAGE I will
-  be the winner 10,16
+  DEBUG The most promising move now is [10,14] alfa=10025 beta=8641
+  DEBUG The most promising move now is [11,14] alfa=10125 beta=8641
+  MESSAGE I will be the winner
+  10,16
+```
 
 ### SUGGEST [X],[Y]
 
-The brain can answer SUGGEST [X],[Y] instead of [X],[Y] and does not change
+The brain can answer `SUGGEST [X],[Y]` instead of `[X],[Y]` and does not change
 it's internal state. The manager has a possibility to ignore brain's suggestion
-and force another move to the brain. Expected manager's answer is PLAY or
-END. In Gomocup tournament the manager always answers the move the brain
-has sent in the SUGGEST command. Most brains do not use SUGGEST command.
+and force another move to the brain. Expected manager's answer is `PLAY` or
+`END`. In Gomocup tournament the manager always answers the move the brain
+has sent in the `SUGGEST` command. Most brains do not use `SUGGEST` command.
