@@ -147,7 +147,12 @@ command. Then the brain is expected to answer such as to `TURN` or `BEGIN` comma
 ```
 Example:
  The manager sends:
-  BOARD 10,10,1 10,11,2 11,11,1 9,10,2 DONE
+  BOARD
+  10,10,1
+  10,11,2
+  11,11,1
+  9,10,2
+  DONE
  The brain answers:
   9,9
 ```
