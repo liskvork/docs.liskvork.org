@@ -213,7 +213,9 @@ brain when sending INFO command.
 
 ```
 Example:
- INFO timeout_match 300000 INFO timeout_turn 10000 INFO max_memory 83886080
+ INFO timeout_match 300000
+ INFO timeout_turn 10000
+ INFO max_memory 83886080
 
  Expected answer: none
 ```
