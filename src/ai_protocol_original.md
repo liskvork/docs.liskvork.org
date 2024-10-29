@@ -1,4 +1,4 @@
-# AI Protocol Original
+# AI Protocol
 
 This is the original protocol as described from [Petr Laštovička's
 website](https://plastovicka.github.io/) here:
