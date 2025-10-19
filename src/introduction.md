@@ -12,7 +12,8 @@ made for previous Gomoku managers such as
 liskvork is free and open source. You can find the source code and issue tracker
 on [sourcehut](https://sr.ht/~emneo/liskvork/). liskvork relies on the community
 to fix bugs and add features: if you’d like to contribute, please read the
-CONTRIBUTING guide and consider sending a patch/submitting a PR.
+CONTRIBUTING guide and consider sending a patch on the
+[development mailing list](https://lists.sr.ht/~emneo/liskvork-devel).
 
 ## License
 
