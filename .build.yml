@@ -10,7 +10,13 @@ secrets:
     - 38d06266-17a7-4fde-a067-3172d4afb2f7
 tasks:
 - build: |
-    cd $repo && mdbook build
+    cd $repo
+    mdbook build
+- check-branch: | 
+    cd $repo
+    if [ "$GIT_REF" != "refs/heads/master" ]; then \
+        complete-build; \
+    fi
 - publish: |
     set +x
     export CLOUDFLARE_ACCOUNT_ID=`cat ~/.clouflare-account-id`
