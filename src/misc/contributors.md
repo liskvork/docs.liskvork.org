@@ -8,6 +8,7 @@ everyone.
 - [Valentin Gegoux](https://github.com/Valegox)
 - [Xavier Mitault](https://github.com/Saverio976)
 - [Leo W. Rent.](https://github.com/LeoWherle)
+- [Ethan Thierry](https://github.com/IchiiDev)
 
 If you feel you're missing from this list, feel free to send a patch on the
 [development mailing list](https://lists.sr.ht/~emneo/liskvork-devel) or just
