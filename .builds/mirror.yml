@@ -4,6 +4,8 @@ secrets:
 environment:
     REPO: docs.liskvork.org
     GH_USER: liskvork
+sources:
+    - https://git.sr.ht/~emneo/docs.liskvork.org
 tasks:
     - check-source: |
         if [ "$BUILD_SUBMITTER" != "git.sr.ht" ]; then \
