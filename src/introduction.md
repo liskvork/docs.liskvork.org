@@ -10,10 +10,10 @@ made for previous Gomoku managers such as
 ## Contributing
 
 liskvork is free and open source. You can find the source code and issue tracker
-on [sourcehut](https://sr.ht/~emneo/liskvork/). liskvork relies on the community
+on [Codeberg](https://codeberg.org/liskvork). liskvork relies on the community
 to fix bugs and add features: if you’d like to contribute, please read the
-CONTRIBUTING guide and consider sending a patch on the
-[development mailing list](https://lists.sr.ht/~emneo/liskvork-devel).
+CONTRIBUTING guide and consider opening a pull request on the
+[proper repository](https://codeberg.org/liskvork).
 
 ## License
 
